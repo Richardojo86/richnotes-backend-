@@ -2,17 +2,21 @@ class Api::V1::NotesController < ApplicationController
 
 def index
   @notes = Note.all
-  render json: @notes
+  @images = Image.all
+  render json: {notes: @notes, images: @images}
 end
 
 def show
   @note = Note.find(params[:id])
-  render json: @note
+  @images = @note.images
+  render json: {note: @note, images: @images}
 end
 
 def create
+
  @note = Note.create(note_params)
- render json: @note
+   img = Image.create(url: params[:image], title: "Another Image", note_id: @note.id)
+ render json: {note: @note, image: img}
 end
 
 def update
